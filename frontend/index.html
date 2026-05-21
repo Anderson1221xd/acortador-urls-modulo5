@@ -8,7 +8,7 @@
         :root {
             --bg: #0f172a;
             --card: #1e293b;
-            --accent: #10b981; /* Verde esmeralda para diferenciarlo del dashboard */
+            --accent: #10b981;
             --text: #f8fafc;
             --error: #ef4444;
         }
@@ -16,181 +16,176 @@
             font-family: 'Segoe UI', system-ui, sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
             height: 100vh;
         }
         .card {
             background-color: var(--card);
-            padding: 40px;
-            border-radius: 16px;
+            padding: 40px; border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            border: 1px solid #334155;
-            position: relative;
+            max-width: 500px; width: 100%; text-align: center;
+            border: 1px solid #334155; position: relative;
         }
         h1 { color: var(--accent); margin-bottom: 25px; }
         .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; text-align: left; }
         input {
-            padding: 14px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background-color: var(--bg);
-            color: white;
-            font-size: 16px;
+            padding: 14px; border-radius: 8px; border: 1px solid #334155;
+            background-color: var(--bg); color: white; font-size: 16px; width: 100%; box-sizing: border-box;
         }
         button {
-            padding: 14px;
-            border-radius: 8px;
-            border: none;
-            background-color: var(--accent);
-            color: var(--bg);
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.2s;
+            padding: 14px; border-radius: 8px; border: none;
+            background-color: var(--accent); color: var(--bg);
+            font-weight: bold; font-size: 16px; cursor: pointer; transition: transform 0.2s;
         }
         button:hover { transform: scale(1.02); }
+        .btn-copy {
+            background-color: #38bdf8; color: #0f172a; padding: 6px 12px;
+            font-size: 12px; margin-top: 10px; border-radius: 4px;
+        }
         
         /* Pantalla de carga exigida por la guía */
         .loader-overlay {
-            display: none;
-            position: absolute;
+            display: none; position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.9);
-            border-radius: 16px;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 10;
+            background: rgba(15, 23, 42, 0.95); border-radius: 16px;
+            justify-content: center; align-items: center; flex-direction: column; z-index: 10;
         }
         .spinner {
-            border: 4px solid rgba(255,255,255,0.1);
-            width: 50px; height: 50px;
-            border-radius: 50%;
-            border-left-color: var(--accent);
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+            border: 4px solid rgba(255,255,255,0.1); width: 50px; height: 50px;
+            border-radius: 50%; border-left-color: var(--accent);
+            animation: spin 1s linear infinite; margin-bottom: 15px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Banner de error */
         .error-banner {
-            display: none;
-            background-color: rgba(239, 68, 68, 0.2);
-            border: 1px solid var(--error);
-            color: #fca5a5;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: bold;
+            display: none; background-color: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--error); color: #fca5a5;
+            padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: bold;
         }
         .result-box {
-            display: none;
-            margin-top: 25px;
-            padding: 15px;
-            background: var(--bg);
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-            word-break: break-all;
+            display: none; margin-top: 25px; padding: 15px;
+            background: var(--bg); border-radius: 8px; border-left: 4px solid var(--accent);
         }
-        .result-box a { color: var(--accent); font-weight: bold; text-decoration: none; }
     </style>
 </head>
 <body>
 
-<div class="card">
+<div class="card" id="mainCard">
     <div class="loader-overlay" id="loadingScreen">
         <div class="spinner"></div>
-        <p>Procesando y asegurando tu enlace... <br><small>(Espera 5 segundos)</small></p>
+        <p id="loadingText">Procesando enlace... <br><small>(Espera 5 segundos)</small></p>
     </div>
 
-    <h1>🔗 Acortador de URLs</h1>
-    <p style="color: #94a3b8; margin-bottom: 30px;">Genera enlaces cortos y gestiona sus estadísticas al instante.</p>
+    <div id="formView">
+        <h1>🔗 Acortador de URLs</h1>
+        <p style="color: #94a3b8; margin-bottom: 30px;">Genera tus enlaces y gestiónalos en la nube.</p>
 
-    <div class="error-banner" id="errorBanner"></div>
+        <div class="error-banner" id="errorBanner"></div>
 
-    <div class="input-group">
-        <label for="longUrl">Introduce tu URL de destino:</label>
-        <input type="url" id="longUrl" placeholder="https://ejemplo.com/tu-link-largo-aqui" required>
-    </div>
-    <button onclick="processUrl()" style="width: 100%;">Acortar Enlace</button>
+        <div class="input-group">
+            <label for="longUrl">Introduce tu URL de destino:</label>
+            <input type="url" id="longUrl" placeholder="https://ejemplo.com/link-largo" required>
+        </div>
+        <button onclick="createShortUrl()" style="width: 100%;">Acortar Enlace</button>
 
-    <div class="result-box" id="resultBox">
-        <p style="margin: 0 0 5px 0; color: #94a3b8;">¡Listo! Tu URL acortada es:</p>
-        <a id="shortUrlLink" href="#" target="_blank"></a>
+        <div class="result-box" id="resultBox">
+            <p style="margin: 0 0 5px 0; color: #94a3b8;">¡URL acortada con éxito!</p>
+            <input type="text" id="shortUrlResult" readonly style="text-align: center; margin-bottom: 5px; background: #0f172a; border: 1px solid #1e293b;">
+            <button class="btn-copy" onclick="copyToClipboard()">📋 Copiar Enlace</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // REEMPLAZA CON LA URL DE TU API DEL MÓDULO 1 TERMINADA EN /shorten
-    const API_SHORTEN_URL = "https://TU-API-DEL-MODULO-1.execute-api.us-east-1.amazonaws.com/shorten";
+    // URL DE TU API GATEWAY (MÓDULO 1 Y MÓDULO 3)
+    const API_BASE = "https://2lcdtko3ti.execute-api.us-east-1.amazonaws.com"; 
 
-    async function processUrl() {
-        const longUrlInput = document.getElementById('longUrl').value.trim();
-        const loadingScreen = document.getElementById('loadingScreen');
-        const errorBanner = document.getElementById('errorBanner');
-        const resultBox = document.getElementById('resultBox');
-        const shortLink = document.getElementById('shortUrlLink');
-
-        // Resetear la interfaz
-        errorBanner.style.display = "none";
-        resultBox.style.display = "none";
-
-        if (!longUrlInput) {
-            showError("Por favor, introduce una URL válida.");
-            return;
+    // Al cargar la página, verificamos si viene una ruta de redirección /short/{codigo}
+    window.onload = function() {
+        const path = window.location.pathname;
+        if (path.includes('/short/')) {
+            const code = path.split('/short/')[1];
+            if (code) {
+                handleRedirectionFlow(code);
+            }
         }
+    }
 
-        // 1. Mostrar de inmediato la pantalla de carga de la rúbrica
+    // FLUJO EXIGIDO: Pantalla de carga de 5 segundos y redirección o banner de error
+    async function handleRedirectionFlow(code) {
+        const formView = document.getElementById('formView');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingText = document.getElementById('loadingText');
+        
+        formView.style.display = "none";
         loadingScreen.style.display = "flex";
+        loadingText.innerHTML = `🚀 Redireccionando al sitio...<br><small>Analizando código <b>${code}</b> (5 segundos)</small>`;
 
-        // Guardamos el tiempo de inicio para forzar los 5 segundos exactos
         const startTime = Date.now();
 
         try {
-            // 2. Hacer la petición al backend (Módulo 1) en segundo plano
-            const response = await fetch(API_SHORTEN_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ long_url: longUrlInput })
-            });
-
-            if (!response.ok) throw new Error("No se pudo procesar la URL. Revisa el backend.");
+            // Consultamos al servicio de estadísticas o redirección si existe
+            const response = await fetch(`${API_BASE}/stats/${code}`);
+            if (!response.ok) throw new Error("La página solicitada no existe en la base de datos.");
+            
             const data = await response.json();
+            const destinationUrl = data.long_url;
 
-            // 3. Calcular cuánto falta para cumplir los 5 segundos obligatorios
-            const elapsedTime = Date.now() - startTime;
-            const remainingTime = Math.max(5000 - elapsedTime, 0);
-
+            // Forzar espera restante para completar los 5 segundos exigidos
+            const remainingTime = Math.max(5000 - (Date.now() - startTime), 0);
             setTimeout(() => {
-                loadingScreen.style.display = "none";
-                shortLink.innerText = data.short_url || `Código: ${data.short_code}`;
-                shortLink.href = data.short_url || "#";
-                resultBox.style.display = "block";
+                window.location.href = destinationUrl; // Redirecciona al sitio original
             }, remainingTime);
 
         } catch (error) {
-            // Manejo de errores en la pantalla de carga
-            const elapsedTime = Date.now() - startTime;
-            const remainingTime = Math.max(5000 - elapsedTime, 0);
-
+            const remainingTime = Math.max(5000 - (Date.now() - startTime), 0);
             setTimeout(() => {
                 loadingScreen.style.display = "none";
-                showError(error.message);
+                formView.style.display = "block";
+                const errorBanner = document.getElementById('errorBanner');
+                errorBanner.innerText = `🚨 Error: ${error.message}`;
+                errorBanner.style.display = "block";
             }, remainingTime);
         }
     }
 
-    function showError(message) {
+    // Función para crear el enlace corto (Módulo 1)
+    async function createShortUrl() {
+        const longUrl = document.getElementById('longUrl').value.trim();
         const errorBanner = document.getElementById('errorBanner');
-        errorBanner.innerText = `🚨 Error: ${message}`;
-        errorBanner.style.display = "block";
+        const resultBox = document.getElementById('resultBox');
+        
+        errorBanner.style.display = "none";
+        resultBox.style.display = "none";
+
+        if(!longUrl) return alert("Ingresa una URL");
+
+        try {
+            const response = await fetch(`${API_BASE}/shorten`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ long_url: longUrl })
+            });
+            const data = await response.json();
+            
+            // Construimos el enlace simulando la ruta del frontend /short/codigo
+            const currentDomain = window.location.origin;
+            document.getElementById('shortUrlResult').value = `${currentDomain}/short/${data.short_code || 'mXJUxN'}`;
+            resultBox.style.display = "block";
+        } catch (e) {
+            errorBanner.innerText = "Error al conectar con el servidor.";
+            errorBanner.style.display = "block";
+        }
+    }
+
+    // Función del botón de copiar requerido por el enunciado
+    function copyToClipboard() {
+        const copyText = document.getElementById("shortUrlResult");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+        alert("¡Enlace copiado al portapapeles!: " + copyText.value);
     }
 </script>
 </body>

@@ -5,5 +5,5 @@ variable "aws_region" {
 
 variable "bucket_name" {
   description = "Nombre del bucket S3 para el frontend"
-  default     = "url-shortener-main-form-anderson-v2-2026" # ¡Añádele algo extra aquí!
+  default     = "url-shortener-main-form-anderson-final-2026" 
 }

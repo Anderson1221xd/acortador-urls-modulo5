@@ -125,9 +125,9 @@
 
         const startTime = Date.now();
 
-        try {
+      try {
             // Consultamos al servicio de estadísticas o redirección si existe
-            const response = await fetch(`${API_BASE}/stats/${code}`);
+            const response = await fetch(`https://2lcdtko3ti.execute-api.us-east-1.amazonaws.com/stats/${code}`);
             if (!response.ok) throw new Error("La página solicitada no existe en la base de datos.");
             
             const data = await response.json();

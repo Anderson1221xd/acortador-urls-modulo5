@@ -3,7 +3,7 @@ name: Deploy Módulo 5 with Terraform
 on:
   push:
     branches:
-      - main # Cambia a master si tu rama principal se llama así
+      - main 
 
 env:
   TF_WORKING_DIR: './terraform'

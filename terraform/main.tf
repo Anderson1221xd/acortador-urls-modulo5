@@ -45,9 +45,7 @@ resource "aws_s3_object" "index_html" {
   content_type = "text/html"
 }
 
-# -----------------------------------------------------------------
-# CONFIGURACIÓN DE CLOUDFRONT PARA EL FRONTEND (MÓDULO 5)
-# -----------------------------------------------------------------
+
 
 resource "aws_cloudfront_distribution" "frontend_distribution" {
   origin {

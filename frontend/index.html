@@ -44,7 +44,7 @@
             font-size: 12px; margin-top: 10px; border-radius: 4px;
         }
         
-        /* Pantalla de carga exigida por la guía */
+        
         .loader-overlay {
             display: none; position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -98,11 +98,10 @@
 </div>
 
 <script>
-    // URL DE TU API GATEWAY (MÓDULO 1 Y MÓDULO 3)
-     // REEMPLAZA la línea que tiene el ID de estadísticas por el ID de UrlShortener-API:
+    
     const API_BASE = "https://b7vykv52n0.execute-api.us-east-1.amazonaws.com";
 
-    // Al cargar la página, verificamos si viene una ruta de redirección /short/{codigo}
+ 
     window.onload = function() {
         const path = window.location.pathname;
         if (path.includes('/short/')) {
@@ -113,7 +112,7 @@
         }
     }
 
-    // FLUJO EXIGIDO: Pantalla de carga de 5 segundos y redirección o banner de error
+    
     async function handleRedirectionFlow(code) {
         const formView = document.getElementById('formView');
         const loadingScreen = document.getElementById('loadingScreen');
@@ -126,14 +125,14 @@
         const startTime = Date.now();
 
       try {
-            // Consultamos al servicio de estadísticas o redirección si existe
+            
             const response = await fetch(`https://2lcdtko3ti.execute-api.us-east-1.amazonaws.com/stats/${code}`);
             if (!response.ok) throw new Error("La página solicitada no existe en la base de datos.");
             
             const data = await response.json();
             const destinationUrl = data.long_url;
 
-            // Forzar espera restante para completar los 5 segundos exigidos
+          
             const remainingTime = Math.max(5000 - (Date.now() - startTime), 0);
             setTimeout(() => {
                 window.location.href = destinationUrl; // Redirecciona al sitio original
@@ -151,7 +150,7 @@
         }
     }
 
-    // Función para crear el enlace corto (Módulo 1)
+
     async function createShortUrl() {
         const longUrl = document.getElementById('longUrl').value.trim();
         const errorBanner = document.getElementById('errorBanner');
@@ -170,7 +169,7 @@
             });
             const data = await response.json();
             
-            // Construimos el enlace simulando la ruta del frontend /short/codigo
+         
             const currentDomain = window.location.origin;
             document.getElementById('shortUrlResult').value = `${currentDomain}/short/${data.short_code || 'mXJUxN'}`;
             resultBox.style.display = "block";
@@ -180,7 +179,7 @@
         }
     }
 
-    // Función del botón de copiar requerido por el enunciado
+  
     function copyToClipboard() {
         const copyText = document.getElementById("shortUrlResult");
         copyText.select();

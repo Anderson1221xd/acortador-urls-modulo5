@@ -58,4 +58,4 @@ Módulo 1 (Acortamiento): Petición POST /shorten para generar los códigos.
 Módulo 2 (Redirección): Petición GET /{codigo} para validar la existencia del enlace antes de la redirección.
 
 Autoría
-Desarrollador Responsable: Anderson1221xd
+Desarrollador Responsable: Anderson Castilla Audivet
